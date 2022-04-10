@@ -9,6 +9,7 @@ import json
 
 from django.http import HttpResponse
 
+from app.service import AttendanceService
 from app.service.AttendanceService import getAttendanceList, getExceptAttendanceList
 from app.utils.DateEncoder import DateEncoder
 
@@ -48,3 +49,16 @@ def getAllExceptAttendance(request):
         "data": attendanceList
     }
     return HttpResponse(json.dumps(res,ensure_ascii="utf-8",cls=DateEncoder), content_type="application/json")
+
+def checkTempture(request):
+    if request.method == "POST":
+        postBody = json.loads(request.body)
+        id = postBody["id"]
+        tempture = postBody["tempture"]
+        operator = postBody["operator"]
+        print(id,tempture,operator)
+        status = AttendanceService.updateCheckTempture(id, tempture, operator)
+        res = {
+            "status":status
+        }
+        return HttpResponse(json.dumps(res,ensure_ascii="utf-8",cls=DateEncoder), content_type="application/json")

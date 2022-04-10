@@ -9,7 +9,7 @@ from django.db import models
 
 class Staff(models.Model):
     id = models.BigAutoField(primary_key=True)
-    uid = models.CharField(max_length=80)
+    uid = models.CharField(max_length=80,null=True)
     name = models.CharField(max_length=30)
     sex = models.BooleanField()
     age = models.SmallIntegerField()

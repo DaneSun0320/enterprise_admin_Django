@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app.utils.middleware.OptionsCheckInterceptor'
+    'app.utils.middleware.LoginHandlerInterceptor'
 ]
 
 ROOT_URLCONF = 'djangoadmin.urls'

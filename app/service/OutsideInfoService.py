@@ -65,16 +65,6 @@ def addRiskArea(province,city,district,riskLevel):
     except Exception as e:
         logger.exception(e)
         return 0
-# creat a function use to delete a riskRegion, param is id
-def deleteRiskArea(id):
-    try:
-        with transaction.atomic():
-            RiskRegion.objects.filter(id=id).delete()
-            logger.debug("删除风险地区")
-            return 1
-    except Exception as e:
-        logger.exception(e)
-        return 0
 # creat a function use to update a riskRegion, param is id,riskLevel
 def updateRiskArea(id,riskLevel):
     try:
@@ -85,6 +75,29 @@ def updateRiskArea(id,riskLevel):
             else:
                 RiskRegion.objects.filter(id=id).update(riskLevel=riskLevel)
             logger.debug("修改风险地区等级")
+            return 1
+    except Exception as e:
+        logger.exception(e)
+        return 0
+
+# 修改风险等级
+def updateRiskLevelService(id,riskLevel):
+    try:
+        with transaction.atomic():
+            RiskRegion.objects.filter(id=id).update(riskLevel=riskLevel)
+            logger.debug(RiskRegion.objects.filter(id=id).values())
+            logger.debug("修改风险地区等级")
+            return 1
+    except Exception as e:
+        logger.exception(e)
+        return 0
+
+# 删除风险等级
+def deleteRiskRegionService(id):
+    try:
+        with transaction.atomic():
+            RiskRegion.objects.filter(id=id).delete()
+            logger.debug("删除风险地区")
             return 1
     except Exception as e:
         logger.exception(e)

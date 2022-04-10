@@ -10,8 +10,8 @@ import json
 from django.http import HttpResponse
 
 from app.utils.DateEncoder import DateEncoder
-from app.service.OutsideInfoService import getOutsideInfo, getOutsideNumber, approve, getRiskArea, deleteRiskArea, \
-    updateRiskArea, addRiskArea
+from app.service.OutsideInfoService import getOutsideInfo, getOutsideNumber, approve, getRiskArea, \
+    updateRiskArea, addRiskArea, updateRiskLevelService, deleteRiskRegionService
 
 
 def getOutside(request):
@@ -58,19 +58,19 @@ def deleteRiskRegion(request):
     if request.method == "POST":
         postBody = json.loads(request.body)
         id = postBody["id"]
-        status = deleteRiskArea(id)
+        status = deleteRiskRegionService(id)
         res = {
             "status":status
         }
     return HttpResponse(json.dumps(res,ensure_ascii="utf-8",cls=DateEncoder), content_type="application/json")
 
-# creat a view to update riskRegion data,
-def updateRiskRegion(request):
+# creat a view to update riskLevel data
+def updateRiskLevel(request):
     if request.method == "POST":
         postBody = json.loads(request.body)
         id = postBody["id"]
-        level = postBody["level"]
-        status = updateRiskArea(id,level)
+        riskLevel = postBody["riskLevel"]
+        status = updateRiskLevelService(id,riskLevel)
         res = {
             "status":status
         }
