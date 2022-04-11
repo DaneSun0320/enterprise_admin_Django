@@ -11,7 +11,8 @@ from django.http import HttpResponse
 
 from app.utils.DateEncoder import DateEncoder
 from app.service.OutsideInfoService import getOutsideInfo, getOutsideNumber, approve, getRiskArea, \
-    updateRiskArea, addRiskArea, updateRiskLevelService, deleteRiskRegionService
+    updateRiskArea, addRiskArea, updateRiskLevelService, deleteRiskRegionService, getOutsideInfoForApprove, \
+    applyOutsideService
 
 
 def getOutside(request):
@@ -21,6 +22,29 @@ def getOutside(request):
         "status":status,
         "data": infoList
     }
+    return HttpResponse(json.dumps(res,ensure_ascii="utf-8",cls=DateEncoder), content_type="application/json")
+
+def getOutsideForApprove(request):
+    if request.method == "GET":
+        status, infoList = getOutsideInfoForApprove()
+    res = {
+        "status":status,
+        "data": infoList
+    }
+    return HttpResponse(json.dumps(res,ensure_ascii="utf-8",cls=DateEncoder), content_type="application/json")
+
+def applyOutside(request):
+    if request.method == "POST":
+        postBody = json.loads(request.body)
+        id = postBody["id"]
+        province = postBody["province"]
+        city = postBody["city"]
+        district = postBody["district"]
+        date = postBody["date"]
+        status = applyOutsideService(id,province,city,district,date)
+        res = {
+            "status":status
+        }
     return HttpResponse(json.dumps(res,ensure_ascii="utf-8",cls=DateEncoder), content_type="application/json")
 
 def getNumber(request):

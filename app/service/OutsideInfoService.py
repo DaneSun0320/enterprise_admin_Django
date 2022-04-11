@@ -10,7 +10,7 @@ import datetime
 
 from django.db import transaction
 
-from app.models.OutsideInfo import  OutsideInfoView
+from app.models.OutsideInfo import OutsideInfoView, OutsideInfo
 from app.models.RiskRegion import RiskRegion
 
 logger = logging.getLogger('log')
@@ -19,13 +19,40 @@ def getOutsideInfo():
     try:
         with transaction.atomic():
             today = datetime.datetime.now()
-            goodList = OutsideInfoView.objects.filter(startDate__lte=datetime.date(today.year, today.month, today.day),endDate__gte=datetime.date(today.year, today.month, today.day)).values()
+            goodList = OutsideInfoView.objects.filter(startDate__lte=datetime.date(today.year, today.month, today.day),endDate__gte=datetime.date(today.year, today.month, today.day),approveStatus=1).values()
             logger.debug("出差列表")
             return 1,list(goodList)
     except Exception as e:
         logger.exception(e)
         return 0,None
 
+def getOutsideInfoForApprove():
+    try:
+        with transaction.atomic():
+            today = datetime.datetime.now()
+            goodList = OutsideInfoView.objects.filter(endDate__gte=datetime.date(today.year, today.month, today.day)).values()
+            logger.debug("出差审批列表")
+            return 1,list(goodList)
+    except Exception as e:
+        logger.exception(e)
+        return 0,None
+
+def applyOutsideService(id,province,city,district,date):
+    try:
+        with transaction.atomic():
+            startDate = datetime.datetime.strptime(date[0], '%Y-%m-%d').date()
+            endDate = datetime.datetime.strptime(date[1], '%Y-%m-%d').date()
+            now = datetime.datetime.now().date()
+            region = RiskRegion.objects.filter(province=province,city=city,district=district).values()
+            status = 0
+            if region:
+                status = region[0]["riskLevel"]
+            OutsideInfo.objects.create(staffId=id,province=province,city=city,district=district,startDate=startDate,endDate=endDate,status=status,applyDate = now,approveStatus=0)
+            logger.debug("申请出差")
+            return 1
+    except Exception as e:
+        logger.exception(e)
+        return 0
 def getOutsideNumber():
     try:
         with transaction.atomic():

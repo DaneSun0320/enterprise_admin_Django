@@ -23,6 +23,7 @@ class OutsideInfo(models.Model):
 class OutsideInfoView(models.Model):
     id = models.AutoField(primary_key=True)
     staffId = models.IntegerField()
+    sectorId = models.IntegerField()
     name  = models.CharField(max_length=30)
     sectorName = models.CharField(max_length=30)
     province = models.CharField(max_length=10)

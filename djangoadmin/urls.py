@@ -25,9 +25,11 @@ urlpatterns = [
     path('deletesectorlist/',SectorController.deleteSector),
     # 外出
     path('outsideinfo/',OutsideInfoController.getOutside),
+    path('outsideinfoforapprove/',OutsideInfoController.getOutsideForApprove),
     path('outsidenumber/',OutsideInfoController.getNumber),
     path('outsideapprove/',OutsideInfoController.approveOutside),
     path('updateriskLevel/',OutsideInfoController.updateRiskLevel),
+    path('applyoutside/',OutsideInfoController.applyOutside),
     # 风险地区
     path('riskregion/',OutsideInfoController.getRiskRegion),
     path('addriskregion/',OutsideInfoController.addRiskRegion),
